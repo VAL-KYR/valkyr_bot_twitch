@@ -73,11 +73,15 @@ def bot_loop():
 				
 			# !quote cmd
 			if re.match("!quote", message):
-				utility.chat(s, random.choice(config.PAT_QUOTE))
+				utility.chat(s, random.choice(config.RES_QUOTE))
 				
 			# !uptime cmd
 			if re.match("!uptime", message):
 				utility.chat(s, FormattedTime(time.time() - startTime))
+				
+			# !wish cmd
+			if re.match("!wish", message):
+				utility.chat(s, random.choice(config.RES_WISHGRANTER) + " " + random.choice(config.RES_REACTORIMG))
 					
 		time.sleep(1 / config.RATE)
 		
