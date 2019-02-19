@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 HOST = "irc.twitch.tv"							# Twitch IRC channel
 PORT = 6667										# IRC port
 NICK = "valkyr_bot"								# bot username
@@ -45,4 +46,3 @@ RES_REACTORIMG = [
 	r'http://knowledgeglue.com/wp-content/uploads/2015/04/126-1Ub3g6M-1024x666.jpg',
 	r'http://knowledgeglue.com/wp-content/uploads/2015/04/124-RG9OOxn.jpg'
 ]
-
