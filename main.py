@@ -14,20 +14,7 @@ startTime = time.time()
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 # some new stuff
-headers = {
-	'Accept': 'application/json',
-	#'client_id': 'b43814b37f824be2a42a3ec2345d00b7',
-	#'response_type': 'code',
-}
-params = (
-	('client_id', 'b43814b37f824be2a42a3ec2345d00b7'),
-	('response_type', 'code'),
-)
-check = webbrowser.open_new_tab("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email%20user-read-currently-playing&state=34fFs29kd09")
-
-#if check:
-#	auth = requests.get("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email&state=34fFs29kd09")
-
+webbrowser.open_new_tab("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email%20user-read-currently-playing&state=34fFs29kd09&show_dialog=True")
 code = raw_input("What's the code?: ")
 
 headers = {
@@ -144,13 +131,9 @@ def bot_loop():
 					utility.chat(s, random.choice(config.RES_GREETING) + " " + username)
 					break
 
-			# !music cmd
-			if re.match("!music", message):
-				utility.chat(s, "♫ " + GetSong() + " ♫")
-
 			# !song cmd
 			if re.match("!music", message):
-				utility.chat(s, "♫ " + GetSongSpotify() + " ♫")
+				utility.chat(s, "Song => " + GetSongSpotify())
 
 			# !quote cmd
 			if re.match("!quote", message):
