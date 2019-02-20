@@ -115,9 +115,8 @@ if os.path.isfile('./token.txt'):
         else:
             print('')
             print('== READING TOKEN FILE ==')
-            file_bits = tokenFile.read().split(' ')
-            print('Contents => ' + str(file_bits[-1]))
-            token_full = str(file_bits[-1])
+            token_full = tokenFile.read()
+            print('Contents => ' + token_full)
 else:
     print('')
     print('== GENERATING A TOKEN FILE ==')
@@ -164,6 +163,9 @@ def GetSong():
         return songData
 
 def GetSongSpotify(token):
+    print('== GETTING CURRENT TRACK ==')
+    print('With token => ' + token)
+
     headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
