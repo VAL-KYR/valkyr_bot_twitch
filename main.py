@@ -9,14 +9,64 @@ import random
 import json
 import requests
 import webbrowser
+import os
 
 startTime = time.time()
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
-# some new stuff
+
+
+# auto-auth
+'''
+headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    #'Authorization': token_type + ' ' + access_token,
+}
+params = (
+	('client_id', 'b43814b37f824be2a42a3ec2345d00b7'),
+	('response_type', 'code'),
+	('redirect_uri', 'https://val-kyr.com/bot_auth/callback/'),
+	('scope', 'user-read-private%20user-read-email%20user-read-currently-playing'),
+    ('show_dialog', 'True'),
+)
+auth = requests.get("https://accounts.spotify.com/authorize", headers=headers, params=params)
+y = json.loads(auth.text)
+print(y)
+'''
+# auto-auth
+# generates u.error u.server_error
+
+# auth storing
+'''
+if os.path.isfile('./spotify.txt'):
+	print('found spotifyFile')
+	with open('spotify.txt', 'r+',) as spotifyFile:
+		if os.stat('./spotify.txt').st_size == 0:
+			print('spotifyFile is empty')
+			webbrowser.open_new_tab("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email%20user-read-currently-playing&state=34fFs29kd09&show_dialog=True")
+			code = raw_input("What's the code?: ")
+			spotifyFile.write(code)
+		else:
+			print('spotifyFile is NOT empty')
+			print(spotifyFile.read())
+			code = spotifyFile.read()
+else:
+	print('no spotifyFile, now creating one')
+	with open('spotify.txt', 'w',) as spotifyFile:
+		webbrowser.open_new_tab("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email%20user-read-currently-playing&state=34fFs29kd09&show_dialog=True")
+		code = raw_input("What's the code?: ")
+		spotifyFile.write(code)
+		'''
+# auth storing
+# cannot reuse auth code
+
+# bad auth code get
 webbrowser.open_new_tab("https://accounts.spotify.com/authorize?client_id=b43814b37f824be2a42a3ec2345d00b7&response_type=code&redirect_uri=https://val-kyr.com/bot_auth/callback/&scope=user-read-private%20user-read-email%20user-read-currently-playing&state=34fFs29kd09&show_dialog=True")
 code = raw_input("What's the code?: ")
+# bad auth code get
 
+# get spotify tokens
 headers = {
 	'Accept': 'application/json',
 }
@@ -42,22 +92,8 @@ print("token_type " + token_type)
 print("scope " + scope)
 print("expires_in " + str(expires_in))
 print("refresh_token " + refresh_token)
-
-
-headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Authorization': token_type + ' ' + access_token,
-}
-params = (
-    ('market', 'ES'),
-)
-response = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers, params=params)
-
-y = json.loads(response.text)
 print("<===========================================>")
-print(str(y["item"]["artists"][0]["name"]) + " - " + y["item"]["name"])
-# some new stuff
+# get spotify tokens
 
 try:
 	s = socket.socket()
@@ -101,9 +137,12 @@ def GetSongSpotify():
 	    ('market', 'ES'),
 	)
 	response = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers, params=params)
-
 	y = json.loads(response.text)
-	return str(y["item"]["artists"][0]["name"]) + " - " + y["item"]["name"]
+
+	message = "<3 " + str(y["item"]["artists"][0]["name"]) + " - " + y["item"]["name"]
+	message += " || " + y["item"]["external_urls"]["spotify"]
+
+	return message.decode('utf-8')
 
 def bot_loop():
 	while connected:
@@ -133,7 +172,7 @@ def bot_loop():
 
 			# !song cmd
 			if re.match("!music", message):
-				utility.chat(s, "Song => " + GetSongSpotify())
+				utility.chat(s, GetSongSpotify())
 
 			# !quote cmd
 			if re.match("!quote", message):

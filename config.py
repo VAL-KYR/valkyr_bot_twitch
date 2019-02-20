@@ -1,4 +1,7 @@
 # -*- coding: UTF-8 -*-
+#SPOTIFY
+
+#TWITCH
 HOST = "irc.twitch.tv"							# Twitch IRC channel
 PORT = 6667										# IRC port
 NICK = "valkyr_bot"								# bot username
@@ -8,6 +11,8 @@ RATE = 20.0 / 30.0									# messages per second
 SMG_LOC = "E:\_RUN_ZIP\SMG\current_song.txt"	# location of current song folder from SMG
 PAT_BAN = [										# the strings that trigger user ban
 	r"gymbag",
+	r"tranny",
+	r"faggot",
 	r"ourdaddytaughtusnottobeashamedofourdicks"
 ]
 PAT_GREETING = [								# the strings that trigger greeting responses
@@ -19,6 +24,7 @@ RES_GREETING = [								# the reponse strings to greetings
 	r"Hello",
 	r"Hi",
 	r"Hiya",
+	r"Sup",
 	r"Howdy"
 ]
 RES_QUOTE = [									# dev quotes
