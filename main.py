@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 #!/usr/bin/env python
 
 # python files
@@ -16,6 +15,9 @@ import requests
 import webbrowser
 import os
 import base64
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 startTime = time.time()
 CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
@@ -72,10 +74,12 @@ def bot_loop(): # BOT RUNTIME CODE
             message = CHAT_MSG.sub("", response)
             print(username + ": " + response)
 
-            # ban based on key words
-            for pattern in config.PAT_BAN:
+            # timeout based on key words
+            #++ establish a list of strikes
+            #++ three strikes with that user and they're banned
+            for pattern in config.PAT_TIMEOUT:
                 if re.match(pattern, message):
-                    utility.ban(s, username)
+                    utility.timeout(s, username, 3600)
                     break
 
             # response to greetings

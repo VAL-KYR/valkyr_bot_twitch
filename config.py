@@ -10,7 +10,7 @@ PASS = "oauth:l2cfmt5u5k2zltv9kf780g2tmjut2f" 	# OAUTH
 CHAN = "#valkyr_dev"							# channel to join
 RATE = 20.0 / 30.0									# messages per second
 SMG_LOC = "E:\_RUN_ZIP\SMG\current_song.txt"	# location of current song folder from SMG
-PAT_BAN = [										# the strings that trigger user ban
+PAT_TIMEOUT = [										# the strings that trigger user ban
     r"gymbag",
     r"tranny",
     r"faggot",

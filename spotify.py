@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-
 # python files
 import config
 
@@ -12,6 +10,9 @@ import requests
 import webbrowser
 import os
 import base64
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 # ini tools
 import ConfigParser
@@ -125,14 +126,16 @@ def GetCurrSong(token):
     )
     response = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers, params=params)
     #print(response.text)
-    y = json.loads(response.text)
     try:
+        y = json.loads(response.text)
         message = "<3 " + str(y["item"]["artists"][0]["name"]) + " - " + y["item"]["name"]
         message += " || " + y["item"]["external_urls"]["spotify"]
     except Exception as e:
         print(response.text)
         print(e)
-        message = "Artist/Song Encoding Error || " + y["item"]["external_urls"]["spotify"]
+        message = 'No song currently playing'
+
+
 
     return message.decode('utf-8') #Returns a song name using a passed token
 
@@ -201,8 +204,7 @@ def Update():
     global REFRESH_TOKEN
 
     if CURR_TOKEN is not None:
-        print(CURR_TOKEN.decay())
-
+        #print(CURR_TOKEN.decay())
         #if int(CURR_TOKEN.timeUntilExpiry) < 60:
         #if (int(CURR_TOKEN.timeUntilExpiry) - int(CURR_TOKEN.expiry)) > 10:
         ACCESS_TOKEN = RefreshToken(REFRESH_TOKEN.text)
