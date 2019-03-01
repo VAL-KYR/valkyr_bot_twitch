@@ -53,38 +53,11 @@ def FormattedTime(timeInSeconds):
     niceTime = str(officialTime[0]) + " secs : " + str(officialTime[1]) + " mins : " + str(officialTime[2]) + " hrs : " + str(officialTime[3]) + " days "
     return niceTime #Returns a Nice Time
 
-def GetSongSpotify(token):
-    print('== GETTING CURRENT TRACK ==')
-    print('With token => ' + token)
-
-    headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': token,
-    }
-    params = (
-        ('market', 'ES'),
-    )
-    response = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=headers, params=params)
-    #print(response.text)
-    y = json.loads(response.text)
-    try:
-        message = "<3 " + str(y["item"]["artists"][0]["name"]) + " - " + y["item"]["name"]
-        message += " || " + y["item"]["external_urls"]["spotify"]
-    except Exception as e:
-        print(response.text)
-        print(e)
-
-    return message.decode('utf-8') #Returns a song name using a passed token
-
 ### SPOTIFY START OPERATIONS ###
 spotify.Init()
 
 def bot_loop(): # BOT RUNTIME CODE
     while connected:
-        ### SPOTIFY ONGOING OPERATIONS ###
-        spotify.Update()
-
         response = s.recv(1024).decode("utf-8")
 
         if response == "PING :tmi.twitch.tv\r\n":
@@ -92,6 +65,7 @@ def bot_loop(): # BOT RUNTIME CODE
             print("Sent Pong for server's Ping")
             print("Bot Uptime " + FormattedTime(time.time() - startTime))
             utility.chat(s, "Bot Uptime " + FormattedTime(time.time() - startTime))
+            spotify.Update()
 
         else:
             username = re.search(r"\w+", response).group(0)
@@ -112,7 +86,7 @@ def bot_loop(): # BOT RUNTIME CODE
 
             # !song cmd
             if re.match("!music", message):
-                utility.chat(s, GetSongSpotify(token_full))
+                utility.chat(s, spotify.GetCurrSong(spotify.CURR_TOKEN))
 
             # !quote cmd
             if re.match("!quote", message):
