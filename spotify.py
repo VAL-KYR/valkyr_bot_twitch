@@ -41,6 +41,7 @@ class Token(object): # Token Objects
 
     #++ make read/write to file extensions later for more complex file reading
     def decay(self): # coundown to token death
+        time.sleep(1)
         self.timeUntilExpiry = str(int(self.timeUntilExpiry) - 1)
         return self.timeUntilExpiry
 CURR_TOKEN = None
@@ -144,7 +145,8 @@ def Init(): # GETS TOKENS FROM FILE OR ASKS TO RE-AUTH
     global CURR_TOKEN
     global ACCESS_TOKEN
     global REFRESH_TOKEN
-    print('@@@ REAL SPOTIFY INIT @@@')
+    print('')
+    print('=== REAL SPOTIFY INIT START ===')
 
     if os.path.isfile('./access_token.ini'):
         print('')
@@ -180,6 +182,9 @@ def Init(): # GETS TOKENS FROM FILE OR ASKS TO RE-AUTH
             TokenToConfig('./refresh_token.ini', REFRESH_TOKEN)
             TokenToConfig('./access_token.ini', ACCESS_TOKEN)
 
+    print('=== REAL SPOTIFY INIT FINISHED ===')
+    print('')
+
 
     CURR_TOKEN = ACCESS_TOKEN
     print('')
@@ -196,18 +201,15 @@ def Init(): # GETS TOKENS FROM FILE OR ASKS TO RE-AUTH
 
 ### APPLICATION ONGOING OPERATIONS ###
 def Update():
-    print('@@@ REAL SPOTIFY RUNTIME @@@')
-
-    #while True:
     global CURR_TOKEN
     global ACCESS_TOKEN
     global REFRESH_TOKEN
 
-    if CURR_TOKEN is not None:
-        #print(CURR_TOKEN.decay())
-        #if int(CURR_TOKEN.timeUntilExpiry) < 60:
-        #if (int(CURR_TOKEN.timeUntilExpiry) - int(CURR_TOKEN.expiry)) > 10:
-        ACCESS_TOKEN = RefreshToken(REFRESH_TOKEN.text)
-        TokenToConfig('./access_token.ini', ACCESS_TOKEN)
-        CURR_TOKEN = ACCESS_TOKEN
-        print(str(CURR_TOKEN) + ' with expiry of ' + str(CURR_TOKEN.expiry) + ' was renewed!')
+    while True:
+        if CURR_TOKEN is not None:
+            print(CURR_TOKEN.decay())
+            if int(CURR_TOKEN.timeUntilExpiry) < 60:
+                ACCESS_TOKEN = RefreshToken(REFRESH_TOKEN.text)
+                TokenToConfig('./access_token.ini', ACCESS_TOKEN)
+                CURR_TOKEN = ACCESS_TOKEN
+                print(str(CURR_TOKEN) + ' with expiry of ' + str(CURR_TOKEN.expiry) + ' was renewed!')
