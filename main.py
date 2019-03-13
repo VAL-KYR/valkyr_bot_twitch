@@ -24,6 +24,14 @@ s = None
 startTime = None
 CHAT_MSG = None
 
+# Threads
+t_bot_init = None
+t_bot_update = None
+t_spot_init = None
+t_spot_update = None
+t_ui_display = None
+t_close_event = None
+
 def FormattedTime(timeInSeconds):
     totalSeconds = timeInSeconds / 60.0
     totalMinutes = totalSeconds / 60.0
@@ -73,8 +81,7 @@ def bot_init():
 
     print('== VAL_KYR TWITCH BOT INIT FINISHED ==')
     print('')
-
-def bot_loop(): # BOT RUNTIME CODE
+def bot_update(): # BOT RUNTIME CODE
     global connected
     global s
     global startTime
@@ -131,33 +138,48 @@ def bot_loop(): # BOT RUNTIME CODE
                 utility.chat(s, random.choice(config.RES_WISHGRANTER) + " " + random.choice(config.RES_REACTORIMG))
 
         time.sleep(1 / config.RATE)
+def CloseEvent(): # Called when the ui window is closed
+    while True:
+        if ui.end == 0:
+            print("Exiting...")
+            os._exit(1)
 
 if __name__ == "__main__":
     # Threads
+    global t_bot_init
+    global t_bot_update
+    global t_spot_init
+    global t_spot_update
+    global t_ui_display
+    global t_close_event
+
     t_bot_init = threading.Thread(target = bot_init)
-    t_bot_loop = threading.Thread(target = bot_loop)
+    t_bot_update = threading.Thread(target = bot_update)
     t_spot_init = threading.Thread(target = spotify.Init)
-    t_spot_loop = threading.Thread(target = spotify.Update)
+    t_spot_update = threading.Thread(target = spotify.Update)
     t_ui_display = threading.Thread(target = ui.Display)
+    t_close_event = threading.Thread(target = CloseEvent)
 
     # Init
     print('')
-    print('@@@ STARTING SERVICES @@@')
+    print('@@@ PREPARING SERVICES @@@')
     print('')
     t_bot_init.start()
     t_bot_init.join()
     t_spot_init.start()
     t_spot_init.join()
 
-    # Looped
+    # Updates
     print('')
     print('@@@ RUNNING SERVICES @@@')
     print('')
-    t_spot_loop.start()
+    t_spot_update.start()
     # make sure that if a token is being updated it MUTEX LOCKS before running more bot commands
-    t_bot_loop.start()
+    t_bot_update.start()
     t_ui_display.start()
+    t_close_event.start()
 
-    t_bot_loop.join()
-    t_spot_loop.join()
+    t_bot_update.join()
+    t_spot_update.join()
     t_ui_display.join()
+    t_close_event.join()

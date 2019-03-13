@@ -9,6 +9,9 @@
 import sys
 from PySide import QtCore, QtGui
 
+end = None
+app = None
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -56,12 +59,14 @@ class Ui_Form(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("Form", "Send", None, QtGui.QApplication.UnicodeUTF8))
 
-
 def Display():
-    import sys
+    global end
+    global app
+
     app = QtGui.QApplication(sys.argv)
     Form = QtGui.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
-    sys.exit(app.exec_())
+    end = app.exec_()
+    sys.exit(end)
