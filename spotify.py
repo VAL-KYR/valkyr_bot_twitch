@@ -195,9 +195,17 @@ def Init(): # GETS TOKENS FROM FILE OR ASKS TO RE-AUTH
     print('== CURR_TOKEN == ')
     print(CURR_TOKEN)
 
-    # do a test of the CURR_TOKEN
+    #++ do a test of the CURR_TOKEN
     print('')
     print(GetCurrSong(CURR_TOKEN))
+    #++ if this returns expired token
+    #DO THIS :
+    '''
+    ACCESS_TOKEN = RefreshToken(REFRESH_TOKEN.text)
+    TokenToConfig('./refresh_token.ini', REFRESH_TOKEN)
+    TokenToConfig('./access_token.ini', ACCESS_TOKEN)
+    CURR_TOKEN = ACCESS_TOKEN
+    '''
 
 ### APPLICATION ONGOING OPERATIONS ###
 def Update():

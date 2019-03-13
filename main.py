@@ -4,14 +4,13 @@
 import config
 import utility
 import spotify
+import ui
 
 # tools
 import socket
 import time
 import re
 import random
-import json
-import requests
 import os
 import base64
 import threading
@@ -95,6 +94,12 @@ def bot_loop(): # BOT RUNTIME CODE
             message = CHAT_MSG.sub("", response)
             print(username + ": " + response)
 
+            # response to !helper words
+            for pattern in config.PAT_HELP:
+                if re.match(pattern, message):
+                    utility.chat(s, ' <3 '.join(config.RES_CMDS))
+                    break
+
             # timeout based on key words
             #++ establish a list of strikes
             #++ three strikes with that user and they're banned
@@ -133,8 +138,10 @@ if __name__ == "__main__":
     t_bot_loop = threading.Thread(target = bot_loop)
     t_spot_init = threading.Thread(target = spotify.Init)
     t_spot_loop = threading.Thread(target = spotify.Update)
+    t_ui_display = threading.Thread(target = ui.Display)
 
     # Init
+    print('')
     print('@@@ STARTING SERVICES @@@')
     print('')
     t_bot_init.start()
@@ -143,8 +150,14 @@ if __name__ == "__main__":
     t_spot_init.join()
 
     # Looped
+    print('')
+    print('@@@ RUNNING SERVICES @@@')
+    print('')
     t_spot_loop.start()
+    # make sure that if a token is being updated it MUTEX LOCKS before running more bot commands
     t_bot_loop.start()
+    t_ui_display.start()
+
     t_bot_loop.join()
     t_spot_loop.join()
-    # make sure that if a token is being updated it MUTEX LOCKS before running more bot commands
+    t_ui_display.join()

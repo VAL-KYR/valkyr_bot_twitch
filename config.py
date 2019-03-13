@@ -42,7 +42,7 @@ RES_WISHGRANTER = [
     r'Путь завершен, человек. Иди ко мне.',
     r'Твое желание скоро исполнится. Иди ко мне.',
     r'Твой путь завершается. Иди ко мне.',
-    r'Иди ко мне. Ты обретешь то, что заслуживаешь.'
+    r'Иди ко мне. Ты обретешь то, что заслуживаешь.',
     r'Вознаграждем будет только один.'
 ]
 RES_REACTORIMG = [
@@ -52,4 +52,15 @@ RES_REACTORIMG = [
     r'http://knowledgeglue.com/wp-content/uploads/2015/04/125-JV9nP4X-1024x612.jpg',
     r'http://knowledgeglue.com/wp-content/uploads/2015/04/126-1Ub3g6M-1024x666.jpg',
     r'http://knowledgeglue.com/wp-content/uploads/2015/04/124-RG9OOxn.jpg'
+]
+PAT_HELP = [
+    r'!help',
+    r'!options',
+    r'!bot'
+]
+RES_CMDS = [
+    r'!music - if a song is currently playing on stream, it will provide the name and artist as well as a spotify URL',
+    r'!quote - provides a random quote by the scrublord herself',
+    r'!uptime - provides the bot\'s uptime after connecting to the Twitch IRC channel',
+    r'!wish - the monolith grants your true desires stalker'
 ]
