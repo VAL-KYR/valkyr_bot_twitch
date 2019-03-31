@@ -202,9 +202,9 @@ def Update():
     global REFRESH_TOKEN
 
     while True:
-        print("current time " + str(dt.datetime.now()))
+        #print("current time " + str(dt.datetime.now()))
         if CURR_TOKEN is not None:
-            print("CURR_TOKEN age " + str((dt.datetime.now() - CURR_TOKEN.timeStamp).total_seconds()))
+            #print("CURR_TOKEN age " + str((dt.datetime.now() - CURR_TOKEN.timeStamp).total_seconds()))
             if (dt.datetime.now() - CURR_TOKEN.timeStamp).total_seconds() >= (CURR_TOKEN.expiry - 120): # 3590 before 3600 expiry is a refresh at 10 seconds alive
                 print('')
                 print('== REFRESHING OLD TOKEN ==')
@@ -212,7 +212,8 @@ def Update():
                 print('CURR_TOKEN UPDATED TO:')
                 print(CURR_TOKEN)
 
-        time.sleep(1)
+        time.sleep(1) #++ consider removing this speedbump
+        #++ MUTEX UNLOCKS for bot update
 
 if __name__ == "__main__":
     Init()

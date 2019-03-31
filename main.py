@@ -88,6 +88,7 @@ def bot_update(): # BOT RUNTIME CODE
     global CHAT_MSG
 
     while connected:
+        #++ MUTEX LOCKS TO BE REMOVED BY SERVICES
         response = s.recv(1024).decode("utf-8")
 
         if response == "PING :tmi.twitch.tv\r\n":
@@ -101,15 +102,14 @@ def bot_update(): # BOT RUNTIME CODE
             message = CHAT_MSG.sub("", response)
             print(username + ": " + response)
 
-            # response to !helper words
+            # response to helper words to give a list of command
             for pattern in config.PAT_HELP:
                 if re.match(pattern, message):
                     utility.chat(s, ' <3 '.join(config.RES_CMDS))
                     break
 
             # timeout based on key words
-            #++ establish a list of strikes
-            #++ three strikes with that user and they're banned
+            #++ establish a list of strikes, three !timeout strikes with that user and they're !banned
             for pattern in config.PAT_TIMEOUT:
                 if re.match(pattern, message):
                     utility.timeout(s, username, 3600)
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     print('@@@ RUNNING SERVICES @@@')
     print('')
     t_spot_update.start()
-    # make sure that if a token is being updated it MUTEX LOCKS before running more bot commands
+    #++ Have the bot update thread WAIT with MUTEX LOCKS on all services
     t_bot_update.start()
     t_ui_display.start()
     t_close_event.start()
