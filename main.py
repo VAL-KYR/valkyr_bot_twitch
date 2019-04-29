@@ -89,6 +89,8 @@ def bot_update(): # BOT RUNTIME CODE
 
     while connected:
         #++ MUTEX LOCKS TO BE REMOVED BY SERVICES
+        # this will prevent running both services without a token or other spotify integrations
+        # being ready to be used with !commands
         response = s.recv(1024).decode("utf-8")
 
         if response == "PING :tmi.twitch.tv\r\n":
@@ -105,7 +107,7 @@ def bot_update(): # BOT RUNTIME CODE
             # response to helper words to give a list of command
             for pattern in config.PAT_HELP:
                 if re.match(pattern, message):
-                    utility.chat(s, ' <3 '.join(config.RES_CMDS))
+                    utility.chat(s, ' SingsNote '.join(config.RES_CMDS))
                     break
 
             # timeout based on key words

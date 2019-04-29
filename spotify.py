@@ -214,6 +214,7 @@ def Update():
 
         time.sleep(1) #++ consider removing this speedbump
         #++ MUTEX UNLOCKS for bot update
+        # this will allow the bot update to run commands again
 
 if __name__ == "__main__":
     Init()
