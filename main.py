@@ -14,9 +14,37 @@ import random
 import os
 import base64
 import threading
+
+# Logger
+import logging
+logging.basicConfig(filename = "/logs/TwitchSpotBot.log", level = logging.DEBUG)
+logger = logging.getLogger()
+
+def read_file_timed(path):
+    """Returns the contents of the file at 'path' and measure time required"""
+    start_time = time.time()
+    try:
+        f = open(path, mode="rb")
+        data = f.read()
+        return data
+    except FileNotFoundError as err:
+        logger.error(err)
+        raise
+    else:
+        f.close()
+    finally:
+        stop_time = time.time()
+        dt = stop_time - start_time
+        logger.info("Time required for {file} = {time}".format(file=path,
+            time=dt))
+
+
+# Setting Encoding
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
+
+
 
 # Globals
 connected = None
@@ -55,7 +83,7 @@ def bot_init():
 
     # Twitch
     print('')
-    print('== VAL_KYR TWITCH BOT INIT START ==')
+    print('== TWITCH BOT INIT START ==')
 
     startTime = time.time()
     CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
@@ -79,7 +107,7 @@ def bot_init():
     print('startTime ' + str(startTime))
     print('CHAT_MSG ' + str(CHAT_MSG))
 
-    print('== VAL_KYR TWITCH BOT INIT FINISHED ==')
+    print('== TWITCH BOT INIT FINISHED ==')
     print('')
 def bot_update(): # BOT RUNTIME CODE
     global connected
